@@ -1,0 +1,107 @@
+{% extends 'todo/base.html'%}
+{% block content %}
+
+
+<div class="row">
+		<!-- Blog Entries Column -->
+		<div class="col-md-8">
+
+			{% if user.is_authenticated %}
+				<h1 class="my-4 text-center alert alert-dark">
+					My Recent Posts
+				</h1>
+			{% else %}
+				<h1 class="my-4 text-center alert alert-dark">
+					{{ user.userpostname}}'s  Recent Posts
+				</h1>
+			{% endif %}
+
+			<!-- Blog Post -->
+			{% if posts %}
+				{% for post in posts %}
+					<div class="card mb-4">
+						{% if post.image %}
+						  <img class="card-img-top" src="{{ post.image.url }}" alt="Post image cap">
+						{% endif %}
+						<div class="card-body">
+							<h2 class="card-title alert alert-danger">{{ post.title }}</h2>
+							<p class="card-text alert alert-info">{{ post.content }}</p>
+							<a href="{% url 'post-update' post.id %}" class="btn btn-info">Update</a>
+							<a href="{% url 'post-delete' post.id %}" class="btn btn-danger">Delete</a>
+							<a href="{{ post.get_absolute_url }}" class="btn btn-primary float-right">View Post Page</a>
+						</div>
+						<div class="card-footer text-muted">
+							Published {{ post.pub_date|date:"F d, Y" }}
+						</div>
+					</div>
+				{% endfor %}
+			{% else %}
+			<div class="alert alert-info text-center" role="alert">
+				<h3>No Posts Yet</h3>
+			</div>
+			{% endif %}
+
+			<!-- Pagination -->
+
+		</div>
+
+		<!-- Sidebar Widgets Column -->
+		<div class="col-md-4">
+
+			<!-- Search Widget -->
+
+			{% if user.is_authenticated %}
+				<a href="{% url 'post-create' %}" class="btn btn-info btn-lg mt-4">
+					Create New Post
+				</a>
+			{% endif %}
+
+			<!-- Side Widget -->
+			<div class="card my-4">
+				<h5 class="card-header">Side Widget</h5>
+				<div class="card-body">
+					You can put anything you want inside of these side widgets. They are easy to use, and feature the
+					new Bootstrap 4 card containers!
+				</div>
+			</div>
+
+			<!-- Messages-->
+			<div class="card my-4">
+				<div class="card-body">
+					{% if messages %}
+					<ul class="messages">
+						{% for message in messages %}
+							<li {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
+						{% endfor %}
+					</ul>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.row -->
+
+<!--Pagination+-->
+{% if is_paginated %}
+	{% if page_obj.has_previous %}
+		<a href="?page=1" class="btn btn-warning">First</a>
+		<a href="?page={{ page_obj.previous_page_number }}" class="btn btn-warning">Previous</a>
+	{% endif %}
+
+	{% for num in page_obj.paginator.page_range %}
+		{% if page_obj.number == num %}
+			<a href="?page={{ num }}" class="btn btn-danger">{{ num }}</a>
+		{% elif num > page_obj.number|add:"-3" or num < page_obj.number|add:"3" %}
+			<a href="?page={{ num }}" class="btn btn-info">{{ num }}</a>
+		{% endif %}
+	{% endfor %}
+
+	{% if page_obj.has_next %}
+		<a href="?page={{ page_obj.next_page_number }}" class="btn btn-warning">Next</a>
+		<a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-warning">Last</a>
+	{% endif %}
+{% endif %}
+<!--Pagination--->
+
+
+{% endblock %}

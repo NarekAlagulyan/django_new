@@ -1,0 +1,11 @@
+{% extends 'todo/base.html'%}
+
+{% block content %}
+<div class="alert alert-warning d-flex">
+	<h2 class="">
+		You are successfully logged out!
+	</h2>
+	<a href="{% url 'login' %}" class="link " style="font-size:40px;">Login again</a>
+</div>
+
+{% endblock %}

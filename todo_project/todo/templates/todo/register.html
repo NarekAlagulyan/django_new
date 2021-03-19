@@ -1,0 +1,24 @@
+{% extends 'todo/base.html'%}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row">
+	<div class="col-8 mx-auto">
+		<h3 class="alert alert-warning text-center">
+			Create a new account
+		</h3>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-6 mx-auto">
+		<form method="POST">
+			{% csrf_token %}
+			{{ form|crispy }}
+			<input type="submit" class="btn btn-success" value="Register">
+			<small><a href="{% url 'login' %}" class="link ml-2">Already have an account?</a></small>
+		</form>
+	</div>
+</div>
+
+{% endblock %}
